@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ConfigProvider } from "antd";
+import SearchContextProvider from "@/context/SearchContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,8 +31,10 @@ export default function RootLayout({
     >
       <html lang="en">
         <body className={inter.className}>
-          <Navbar />
-          {children}
+          <SearchContextProvider>
+            <Navbar />
+            {children}
+          </SearchContextProvider>
         </body>
       </html>
     </ConfigProvider>

@@ -1,15 +1,52 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Typewriter from "typewriter-effect";
 import { motion } from "framer-motion";
+import algoliasearch from "algoliasearch";
+import { useSearchContext } from "@/context/SearchContext";
+import { Product } from "@/utilities/types";
 
 function SearchInput() {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState<string>("");
+  const { matchProducts, setMatchProducts } = useSearchContext();
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = async (e: any) => {
     setInput(e.target.value);
+    // if (e.key == "Enter") {
+
+    // }
   };
+
+  // Algolia Search products
+  const searchProducts = async (query: string) => {
+    const client = algoliasearch(
+      "61K89SD3KF",
+      "aca5cb2a6d51386a56dc1e10517e8554"
+    );
+    const index = client.initIndex("merged");
+
+    const response = await index.search(query);
+
+    return response.hits;
+  };
+
+  useEffect(() => {
+    async function getData() {
+      // if the user hit enter key, then find search the products that matches the given input
+      const res = await searchProducts(input);
+      const data: Product[] = [];
+
+      // Extract the id and name from each product
+      res.forEach((item) =>
+        data.push({ id: item.id, name: item.name, category: item.category })
+      );
+      // Update the update products
+      setMatchProducts(data);
+    }
+
+    getData();
+  }, [input]);
 
   return (
     <motion.div

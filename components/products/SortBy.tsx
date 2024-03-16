@@ -3,7 +3,7 @@ import { Radio } from "antd";
 import React from "react";
 import { motion } from "framer-motion";
 
-function SearchProductResult() {
+function SortBy() {
   return (
     <div className="mt-10">
       <motion.header
@@ -25,4 +25,4 @@ function SearchProductResult() {
   );
 }
 
-export default SearchProductResult;
+export default SortBy;

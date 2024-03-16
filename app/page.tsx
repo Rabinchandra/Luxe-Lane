@@ -1,5 +1,10 @@
-import Image from "next/image";
+import SearchAlgo from "@/components/algo-search/SearchAlgo";
 
 export default function Home() {
-  return <h1>Home Page</h1>;
+  return (
+    <div>
+      <h3>Search Testing</h3>
+      <SearchAlgo />
+    </div>
+  );
 }

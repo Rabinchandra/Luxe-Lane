@@ -2,8 +2,11 @@
 import React from "react";
 import { Rate } from "antd";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type ProductProps = {
+  id: string;
   imgUrl: string;
   category: string;
   name: string;
@@ -13,6 +16,7 @@ type ProductProps = {
 };
 
 function ProductCard({
+  id,
   imgUrl,
   category,
   name,
@@ -20,6 +24,8 @@ function ProductCard({
   price,
   index,
 }: ProductProps) {
+  const router = useRouter();
+
   return (
     <motion.div
       className="product-card  h-[300px] rounded-2xl p-5 py-4 flex flex-col space-y-2"
@@ -30,6 +36,7 @@ function ProductCard({
         duration: 2,
         delay: 2 + Number("0." + index),
       }}
+      onClick={() => router.push("/products/" + id)}
     >
       <div
         className="img bg-no-repeat bg-contain w-[150px] h-[300px] self-center mb-4"

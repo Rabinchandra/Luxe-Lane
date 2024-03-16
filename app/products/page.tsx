@@ -1,5 +1,6 @@
+"use client";
 import FilterCategory from "@/components/products/FilterCategory";
-import SearchProductResult from "@/components/products/SearchProductResult";
+import SortBy from "@/components/products/SortBy";
 import SearchResult from "@/components/products/SearchResult";
 import React from "react";
 
@@ -8,7 +9,7 @@ function page() {
     <main className="mx-14 my-10 flex">
       <aside className="w-[200px]">
         <FilterCategory />
-        <SearchProductResult />
+        <SortBy />
       </aside>
       <section className="ml-16">
         <SearchResult />
