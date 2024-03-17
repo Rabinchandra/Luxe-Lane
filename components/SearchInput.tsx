@@ -12,10 +12,9 @@ function SearchInput() {
   const { matchProducts, setMatchProducts } = useSearchContext();
 
   const handleInput = async (e: any) => {
-    setInput(e.target.value);
-    // if (e.key == "Enter") {
-
-    // }
+    if (e.keyCode === 13) {
+      setInput(e.target.value);
+    }
   };
 
   // Algolia Search products
@@ -39,7 +38,14 @@ function SearchInput() {
 
       // Extract the id and name from each product
       res.forEach((item) =>
-        data.push({ id: item.id, name: item.name, category: item.category })
+        data.push({
+          id: item.id,
+          name: item.name,
+          category: item.category,
+          images: item.images,
+          price: item.price,
+          rating: item.rating,
+        })
       );
       // Update the update products
       setMatchProducts(data);
@@ -61,7 +67,7 @@ function SearchInput() {
           type="text"
           placeholder="Search items"
           className="outline-none block mt-1 ml-2 w-[270px] text-sm bg-transparent"
-          onChange={handleInput}
+          onKeyDown={handleInput}
         />
       </section>
       {input.length === 0 && (

@@ -7,11 +7,11 @@ import React from "react";
 function page() {
   return (
     <main className="mx-14 my-10 flex">
-      <aside className="w-[200px]">
+      <aside className="w-[300px]">
         <FilterCategory />
         <SortBy />
       </aside>
-      <section className="ml-16">
+      <section className="flex-1">
         <SearchResult />
       </section>
     </main>

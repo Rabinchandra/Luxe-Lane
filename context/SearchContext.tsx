@@ -1,6 +1,12 @@
 "use client";
 import { Product } from "@/utilities/types";
-import React, { ReactNode, createContext, useState, useContext } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useState,
+  useContext,
+  useMemo,
+} from "react";
 
 interface SearchContextType {
   matchProducts: Product[];
@@ -15,7 +21,10 @@ export const SearchContext = createContext<SearchContextType>({
 export function SearchContextProvider({ children }: { children: ReactNode }) {
   const [matchProducts, setMatchProducts] = useState<Product[]>([]);
 
-  const contextValue = { matchProducts, setMatchProducts };
+  const contextValue = useMemo(
+    () => ({ matchProducts, setMatchProducts }),
+    [matchProducts, setMatchProducts]
+  );
 
   return (
     <SearchContext.Provider value={contextValue}>

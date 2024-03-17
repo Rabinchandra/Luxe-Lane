@@ -8,7 +8,8 @@ function SearchResult() {
   const { matchProducts } = useSearchContext();
 
   useEffect(() => {
-    console.log("Match", matchProducts);
+    console.clear();
+    console.log("Match", matchProducts.slice(0, 5));
   }, [matchProducts]);
 
   return (
@@ -26,18 +27,19 @@ function SearchResult() {
         Search Result here
       </motion.header>
       <div className="search-result grid grid-cols-4 gap-10">
-        {/* {matchProducts.map((d, index) => (
+        {matchProducts.map((d, index) => (
           <ProductCard
-            key={`product-card-${index}`}
+            key={`product-card-${index}-${parseInt(Math.random() * 1000)}`}
             name={d.name}
             category={d.category}
-            imgUrl={d.images[0]}
-            price={d.price}
+            imgUrl={d.images[0] ? d.images[0] : ""}
+            price={d.price || 0}
             rating={d.rating}
             index={index}
             id={d.id}
           />
-        ))} */}
+        ))}
+        {/* {matchProducts.forEach((d: any) => console.log(d))} */}
       </div>
     </main>
   );
