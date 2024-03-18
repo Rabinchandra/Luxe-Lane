@@ -6,8 +6,8 @@ import React from "react";
 
 function page() {
   return (
-    <main className="mx-14 my-10 flex">
-      <aside className="w-[300px]">
+    <main className="mx-14 my-10 flex relative">
+      <aside className="w-[300px] sticky top-3">
         <FilterCategory />
         <SortBy />
       </aside>

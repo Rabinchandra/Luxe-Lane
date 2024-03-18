@@ -83,3 +83,11 @@
   margin-left: 0;
   margin-top: 0;
 }
+
+* {
+  scroll-behavior: smooth !important;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

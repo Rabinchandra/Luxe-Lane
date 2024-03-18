@@ -2,7 +2,6 @@
 import React from "react";
 import { Rate } from "antd";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface ProductProps {
@@ -37,7 +36,7 @@ function ProductCard({
           duration: 2,
           delay: Number("0." + index),
         }}
-        // onClick={() => router.push("/products/" + id)}
+        onClick={() => router.push("/products/" + id)}
       >
         <div
           className="img bg-no-repeat bg-contain w-[150px] h-[300px] self-center mb-4"

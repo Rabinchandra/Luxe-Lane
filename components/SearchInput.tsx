@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import Typewriter from "typewriter-effect";
 import { motion } from "framer-motion";
@@ -10,11 +10,17 @@ import { Product } from "@/utilities/types";
 function SearchInput() {
   const [input, setInput] = useState<string>("");
   const { matchProducts, setMatchProducts } = useSearchContext();
+  const [changeInput, setChangeInput] = useState<string>("");
 
   const handleInput = async (e: any) => {
     if (e.keyCode === 13) {
       setInput(e.target.value);
     }
+  };
+
+  // For Animation TypeWritter Effect in the input - input change
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setChangeInput(e.target.value);
   };
 
   // Algolia Search products
@@ -68,9 +74,10 @@ function SearchInput() {
           placeholder="Search items"
           className="outline-none block mt-1 ml-2 w-[270px] text-sm bg-transparent"
           onKeyDown={handleInput}
+          onChange={handleChangeInput}
         />
       </section>
-      {input.length === 0 && (
+      {changeInput.length === 0 && (
         <section className="absolute top-[14px] text-gray-400 left-40 flex">
           "
           <Typewriter
