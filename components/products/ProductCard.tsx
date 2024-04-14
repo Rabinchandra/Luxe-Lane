@@ -3,6 +3,7 @@ import React from "react";
 import { Rate } from "antd";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Numeral from "react-numeral";
 
 interface ProductProps {
   id: string;
@@ -48,8 +49,10 @@ function ProductCard({
 
         <span className="text-gray-400 block text-[13px]">{category}</span>
         <span className="font-bold block text-sm">{name}</span>
-        <Rate allowHalf defaultValue={rating} disabled />
-        <span>$ {price}</span>
+        <Rate allowHalf defaultValue={Number(rating)} disabled />
+        <span>
+          $ <Numeral value={price} format={"0,0"} />
+        </span>
       </motion.div>
     </section>
   );

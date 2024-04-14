@@ -5,7 +5,6 @@ import Navlinks from "./Navlinks";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import SearchContextProvider from "@/context/SearchContext";
 
 function CartLogo({ cartNo }: { cartNo: number }) {
   return (

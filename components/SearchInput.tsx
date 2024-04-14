@@ -9,7 +9,7 @@ import { Product } from "@/utilities/types";
 
 function SearchInput() {
   const [input, setInput] = useState<string>("");
-  const { matchProducts, setMatchProducts } = useSearchContext();
+  const { setMatchProducts } = useSearchContext();
   const [changeInput, setChangeInput] = useState<string>("");
 
   const handleInput = async (e: any) => {

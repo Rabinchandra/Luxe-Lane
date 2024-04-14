@@ -91,3 +91,13 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+/* Product detail */
+.product-detail {
+  /* border: 1px solid blue; */
+}
+
+.product-detail .current-image {
+  width: 600px;
+  height: 500px;
+}

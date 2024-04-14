@@ -58,7 +58,7 @@ function Navlinks() {
     <div className="links text-gray-400 space-x-8 ml-16 flex items-center">
       {links.map((l, key) => (
         <motion.div
-          // key={`navlink-${key}-${~~(Math.random() * 100)}`}
+          key={`navlink-${key}-${~~(Math.random() * 1000)}`}
           animate={{ opacity: 1, x: 0 }}
           initial={{ opacity: 0, x: 20 }}
           transition={{

@@ -27,6 +27,7 @@ function FilterCategory() {
       <section className="space-y-2">
         {catgories.map((c, index) => (
           <motion.div
+            key={Math.random() * 10000 + "_category"}
             animate={{ opacity: 1, x: 0 }}
             initial={{ opacity: 0, x: 10 }}
             transition={{
