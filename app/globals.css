@@ -1,11 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@100;200;300;400;500;700&display=swap");
 
 * {
   font-family: "Comfortaa", "Arial";
   box-sizing: border-box;
+}
+
+/* Global Styles */
+.btn-primary {
+  background-color: black;
+  border: none;
+  outline: 0;
+  padding: 12px 14px;
+  text-align: center;
+  color: #fff;
+  font-weight: 100 !important;
+}
+
+.btn-secondary {
+  border: 1px solid black;
+  outline: 0;
+  padding: 11px 14px;
+  text-align: center;
+  font-weight: 100 !important;
 }
 
 /* Navbar */
@@ -98,6 +117,14 @@
 }
 
 .product-detail .current-image {
-  width: 600px;
+  width: 500px;
   height: 500px;
+  background-position: top;
+  /* object-fit: contain; */
+}
+
+.buy-now-btn,
+.compare-product-btn {
+  padding-left: 2em;
+  padding-right: 2em;
 }

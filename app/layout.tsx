@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ConfigProvider } from "antd";
 import SearchContextProvider from "@/context/SearchContext";
+import getAllProduct from "@/firebase/allData";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <ConfigProvider
       theme={{

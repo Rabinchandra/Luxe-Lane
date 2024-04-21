@@ -1,16 +1,17 @@
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "./config";
 import { Product } from "../interface/Product";
+import { products } from "./data";
 
-// export function addAllProducts() {
-//   products.forEach(async (data) => {
-//     const productCollection = collection(db, "products");
-//     const newDocRef = doc(productCollection, data.id);
+export function addAllProducts() {
+  products.forEach(async (data) => {
+    const productCollection = collection(db, "products");
+    const newDocRef = doc(productCollection, data.id);
 
-//     const res = await setDoc(newDocRef, data);
-//     console.log(res);
-//   });
-// }
+    const res = await setDoc(newDocRef, data);
+    console.log(res);
+  });
+}
 
 export async function getProductById(id: string): Promise<Product | null> {
   // Check if ID is provided

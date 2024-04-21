@@ -54,6 +54,7 @@ function SearchResult() {
             rating={d.rating}
             index={index}
             id={d.id}
+            objectID={d.objectId}
           />
         ))}
       </div>

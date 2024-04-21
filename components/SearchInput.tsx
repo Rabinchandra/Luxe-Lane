@@ -43,16 +43,17 @@ function SearchInput() {
       const data: Product[] = [];
 
       // Extract the id and name from each product
-      res.forEach((item) =>
+      res.forEach((item) => {
         data.push({
           id: item.id,
+          objectId: item.objectID,
           name: item.name,
           category: item.category,
           images: item.images,
           price: item.price,
           rating: item.rating,
-        })
-      );
+        });
+      });
       // Update the update products
       setMatchProducts(data);
     }

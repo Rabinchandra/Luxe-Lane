@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { getProductById } from "../.././../firebase/dbOperations";
 import { Product } from "@/interface/Product";
 import Numeral from "react-numeral";
 import AddToFavoriteButton from "@/components/product-detail/AddToFavoriteButton";
+import { Rate } from "antd";
 
 type Params = {
   params: {
@@ -19,10 +20,11 @@ async function ProductDetail({ params }: Params) {
   return (
     <div className="mx-14 product-detail">
       <header className="text-slate-400 font-extralight text-sm mt-8">
-        Home / {product?.category} / {product?.subcategories[0]}
+        Home / {product?.category} / {product?.subcategories[0]} - Object Id:{" "}
+        {product?.objectID}
       </header>
 
-      <main className="mt-16 flex justify-between">
+      <main className="mt-16 flex justify-between mx-16">
         {/* Image */}
         <section className="image">
           <div
@@ -38,7 +40,27 @@ async function ProductDetail({ params }: Params) {
             $ <Numeral value={product?.price} format={"0,0"} />
           </div>
           <AddToFavoriteButton />
+          <p className="mt-8 leading-7 text-gray-400 font-extralight mb-6">
+            {product?.description}
+          </p>
+          <div className="flex">
+            <Rate
+              allowHalf
+              defaultValue={Number(product?.rating)}
+              disabled
+              className="text-3xl"
+            />{" "}
+            <span className="block mt-2 ml-5">(2.5K Reviews)</span>
+          </div>
+          <div className="buttons mt-12 space-x-8">
+            <button className="btn-primary buy-now-btn">Buy Now</button>
+            <button className="btn-secondary compare-product-btn">
+              Compare Product
+            </button>
+          </div>
         </section>
+
+        {/* Related Products */}
       </main>
     </div>
   );

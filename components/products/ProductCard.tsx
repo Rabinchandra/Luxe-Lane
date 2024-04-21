@@ -13,6 +13,7 @@ interface ProductProps {
   rating?: Number;
   price?: Number;
   index?: Number;
+  objectID?: string;
 }
 
 function ProductCard({
@@ -23,6 +24,7 @@ function ProductCard({
   rating,
   price,
   index,
+  objectID,
 }: ProductProps) {
   const router = useRouter();
 
@@ -37,7 +39,7 @@ function ProductCard({
           duration: 2,
           delay: Number("0." + index),
         }}
-        onClick={() => router.push("/products/" + id)}
+        onClick={() => router.push(`/products/${id}`)}
       >
         <div
           className="img bg-no-repeat bg-contain w-[150px] h-[300px] self-center mb-4"
