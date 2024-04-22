@@ -128,3 +128,27 @@
   padding-left: 2em;
   padding-right: 2em;
 }
+
+/* Recommended */
+.auc-Recommend-title {
+  font-weight: bold;
+  font-size: 2em;
+  /* display: none; */
+}
+.auc-Recommend-list {
+  display: flex;
+  align-items: center;
+  height: 500px;
+  overflow-x: scroll;
+  gap: 40px;
+}
+
+.auc-Recommend-item {
+  /* margin-top: 2em; */
+  transition: 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+  cursor: pointer;
+}
+
+.auc-Recommend-item:hover {
+  transform: scale(1.2);
+}

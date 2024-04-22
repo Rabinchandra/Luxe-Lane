@@ -5,6 +5,7 @@ import { Product } from "@/interface/Product";
 import Numeral from "react-numeral";
 import AddToFavoriteButton from "@/components/product-detail/AddToFavoriteButton";
 import { Rate } from "antd";
+import RelatedProductsItems from "@/components/RelatedProducts";
 
 type Params = {
   params: {
@@ -18,10 +19,9 @@ async function ProductDetail({ params }: Params) {
   const product: Product | null = (await getProductById(id)) || null;
 
   return (
-    <div className="mx-14 product-detail">
-      <header className="text-slate-400 font-extralight text-sm mt-8">
-        Home / {product?.category} / {product?.subcategories[0]} - Object Id:{" "}
-        {product?.objectID}
+    <div className="product-detail">
+      <header className="text-slate-400 font-extralight text-sm mt-8 mx-14">
+        Home / {product?.category} / {product?.subcategories[0]}
       </header>
 
       <main className="mt-16 flex justify-between mx-16">
@@ -62,6 +62,9 @@ async function ProductDetail({ params }: Params) {
 
         {/* Related Products */}
       </main>
+      <div className="related-products ml-14 my-32 overflow">
+        <RelatedProductsItems currentObjectID={product?.objectID || ""} />
+      </div>
     </div>
   );
 }
