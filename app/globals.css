@@ -152,3 +152,10 @@
 .auc-Recommend-item:hover {
   transform: scale(1.2);
 }
+
+/* Product detail image */
+.product-detail-active-image {
+  outline: 1px solid #333;
+  padding: 2px;
+  transform: scale(1.5);
+}

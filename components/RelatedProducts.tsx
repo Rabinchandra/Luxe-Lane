@@ -1,6 +1,7 @@
 import { RelatedProducts } from "@algolia/recommend-react";
 import recommend from "@algolia/recommend";
 import { Rate } from "antd";
+import { useState, useEffect } from "react";
 
 const recommendClient = recommend(
   "61K89SD3KF",
@@ -39,7 +40,7 @@ function RelatedProductsItems({
       indexName={indexName}
       objectIDs={[currentObjectID]}
       itemComponent={RelatedItem}
-      maxRecommendations={14}
+      maxRecommendations={8}
     />
   );
 }
