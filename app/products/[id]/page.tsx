@@ -7,6 +7,7 @@ import AddToFavoriteButton from "@/components/product-detail/AddToFavoriteButton
 import { Rate } from "antd";
 import RelatedProductsItems from "@/components/RelatedProducts";
 import AnimatedComponent from "@/components/AnimatedComponent";
+// import "./style.module.css";
 
 type Params = {
   params: {
@@ -34,7 +35,7 @@ function ProductDetail({ params }: Params) {
         </header>
       </AnimatedComponent>
 
-      <main className="mt-16 flex justify-between mx-16">
+      <main className="mt-16 flex justify-between mx-32">
         {/* Image */}
         <section className="image">
           <AnimatedComponent _delay={2}>
@@ -117,10 +118,71 @@ function ProductDetail({ params }: Params) {
         {/* Related Products */}
       </main>
       <AnimatedComponent _delay={0}>
-        <div className="related-products ml-14 my-32 overflow animation-element">
+        <div className="related-products ml-32 mt-32 mb-16 overflow animation-element">
           <RelatedProductsItems currentObjectID={product?.objectID || ""} />
         </div>
       </AnimatedComponent>
+
+      <section className="mx-32 pb-16 flex justify-between">
+        <div className="product-more-detail w-[45%]">
+          <AnimatedComponent>
+            <h2 className="text-3xl font-bold">Product Details</h2>
+          </AnimatedComponent>
+          <table className="mt-14">
+            {Object.entries(product?.attributes || {}).map((attribute) => (
+              <tr>
+                <td className="font-extrabold">
+                  <AnimatedComponent>{attribute[0]}</AnimatedComponent>
+                </td>
+                <td className="font-extralight text-gray-700">
+                  <AnimatedComponent>{attribute[1]}</AnimatedComponent>
+                </td>
+              </tr>
+            ))}
+          </table>
+        </div>
+        <div className="customer-reviews w-[45%]">
+          <AnimatedComponent>
+            <h2 className="text-3xl font-bold mb-14">Customer Products</h2>
+          </AnimatedComponent>
+          {product?.reviews.map((review) => (
+            <AnimatedComponent>
+              <div className="review mb-8 w-[80%] flex space-x-6">
+                <div>
+                  <div
+                    className="review-user-img w-[50px] h-[50px] rounded-full flex-1 bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url(https://img.freepik.com/free-photo/freedom-concept-with-hiker-mountain_23-2148107064.jpg)`,
+                    }}
+                  ></div>
+                </div>
+                <div>
+                  <h2 className="my-1 font-bold">{review.user}</h2>
+                  <Rate
+                    allowHalf
+                    defaultValue={Number(review?.rating)}
+                    disabled
+                    className="text-sm"
+                  />
+                  <p className="font-extralight text-sm mt-3">
+                    {review.comment}
+                  </p>
+                </div>
+              </div>
+            </AnimatedComponent>
+          ))}
+
+          <div className="current-user-review mx-10">
+            <input
+              type="text"
+              placeholder="Type your review here"
+              className="border-b-[1px] p-2 w-[100%] block outline-none"
+            />
+            <Rate allowHalf className="mt-4 rate" />
+            <button className="btn-secondary mt-7 block">Add Review</button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

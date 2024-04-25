@@ -159,3 +159,24 @@
   padding: 2px;
   transform: scale(1.5);
 }
+
+/* Product More details / configuation Table */
+.product-more-detail table td {
+  padding: 12px 2em;
+}
+
+.product-more-detail table tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+
+.customer-user-review input::placeholder {
+  font-weight: 100 !important;
+}
+
+.rate {
+  transition: 0.5s;
+}
+
+.rate:hover {
+  transform: scale(1.1);
+}
