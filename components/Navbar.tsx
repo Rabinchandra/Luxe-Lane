@@ -29,6 +29,8 @@ function CartLogo({ cartNo }: { cartNo: number }) {
 }
 
 function Navbar() {
+  const user = null; // just for testing
+
   return (
     <nav className="navbar py-5 px-14  flex items-center bg-white justify-between sticky top-0 z-10 bg-opacity-80 backdrop-filter backdrop-blur-md">
       {/* Logo */}
@@ -42,7 +44,7 @@ function Navbar() {
         <Navlinks />
       </section>
 
-      <section className="flex space-x-12">
+      <section className="flex space-x-12 items-center">
         <SearchInput />
         {/* Cart */}
         <CartLogo cartNo={4} />
@@ -57,17 +59,38 @@ function Navbar() {
           <Image src={"/heart.svg"} width={23} height={23} alt="s" />
         </motion.div>
 
-        {/* Profile */}
-        <motion.div
-          className="profile w-10 h-10 bg-no-repeat bg-center bg-cover rounded-full hover:opacity-50 cursor-pointer"
-          style={{
-            backgroundImage:
-              "url('https://as2.ftcdn.net/v2/jpg/03/21/22/21/1000_F_321222112_lzcSyCPFs3VUxdiAWA4z72ROLLRv8Hij.jpg')",
-          }}
-          animate={{ opacity: 1, scale: 1 }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          transition={{ type: "spring", delay: 2.3 }}
-        ></motion.div>
+        {/* if user login */}
+        {user && (
+          /* Profile */
+          <motion.div
+            className="profile w-10 h-10 bg-no-repeat bg-center bg-cover rounded-full hover:opacity-50 cursor-pointer"
+            style={{
+              backgroundImage:
+                "url('https://as2.ftcdn.net/v2/jpg/03/21/22/21/1000_F_321222112_lzcSyCPFs3VUxdiAWA4z72ROLLRv8Hij.jpg')",
+            }}
+            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.5 }}
+            transition={{ type: "spring", delay: 2.3 }}
+          ></motion.div>
+        )}
+        {/* if the user doesn't login, then display the login/sign up button */}
+        {
+          // <Link
+          //   href={"/login"}
+          //   className="bg-black rounded text-sm text-white px-5 py-5 block"
+          // >
+          //   Log in
+          // </Link>
+          <Link
+            href={"/login"}
+            className=" flex items-center text-sm"
+            style={{}}
+          >
+            <span className="block py-3 px-5 rounded-lg bg-black text-white ">
+              Log in
+            </span>
+          </Link>
+        }
       </section>
     </nav>
   );

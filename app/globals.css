@@ -9,6 +9,14 @@
 }
 
 /* Global Styles */
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: #fff;
+}
+
 .btn-primary {
   background-color: black;
   border: none;
