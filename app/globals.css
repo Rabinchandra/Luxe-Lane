@@ -188,3 +188,14 @@ a:hover {
 .rate:hover {
   transform: scale(1.1);
 }
+
+/* Login Page */
+.google-login:hover {
+  cursor: pointer;
+  background-color: #f6f6f69d;
+}
+
+.login hr {
+  width: 500px;
+  margin: auto;
+}

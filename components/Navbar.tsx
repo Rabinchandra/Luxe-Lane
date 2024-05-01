@@ -5,6 +5,7 @@ import Navlinks from "./Navlinks";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 function CartLogo({ cartNo }: { cartNo: number }) {
   return (
@@ -75,12 +76,6 @@ function Navbar() {
         )}
         {/* if the user doesn't login, then display the login/sign up button */}
         {
-          // <Link
-          //   href={"/login"}
-          //   className="bg-black rounded text-sm text-white px-5 py-5 block"
-          // >
-          //   Log in
-          // </Link>
           <Link
             href={"/login"}
             className=" flex items-center text-sm"
