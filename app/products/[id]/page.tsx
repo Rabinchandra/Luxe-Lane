@@ -7,7 +7,6 @@ import AddToFavoriteButton from "@/components/product-detail/AddToFavoriteButton
 import { Rate } from "antd";
 import RelatedProductsItems from "@/components/RelatedProducts";
 import AnimatedComponent from "@/components/AnimatedComponent";
-// import "./style.module.css";
 
 type Params = {
   params: {

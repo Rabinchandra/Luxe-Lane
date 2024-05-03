@@ -199,3 +199,7 @@ a:hover {
   width: 500px;
   margin: auto;
 }
+
+.ant-message-notice-content {
+  background: #fff !important;
+}

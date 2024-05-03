@@ -1,13 +1,73 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import { motion } from "framer-motion";
+import { createUser, signInWithGoogle } from "@/firebase/dbOperations";
+import { message } from "antd";
 
 function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repassword, setRepassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isBeingSubmitted, setIsBeingSubmitted] = useState(false); // to track while submitting form - used for loading/spinner
+
+  // no server actions - used traditional method of form submit
+  const handleFormSubmit = () => {
+    console.clear();
+    // Data Validation
+    if (password !== repassword) {
+      error("Password should be matched!");
+      return;
+    }
+
+    setIsBeingSubmitted(true);
+
+    // create user
+    createUser(email, password, name)
+      .then((msg) => {
+        sucess(msg);
+      })
+      .catch((err) => error(err))
+      .finally(() => setIsBeingSubmitted(false));
+  };
+
+  const onSignInWithGoogle = () => {
+    signInWithGoogle()
+      .then((userCredential) => {
+        // Signed in successfully
+        const user = userCredential.user;
+        sucess("User created Successfully!");
+      })
+      .catch((error) => {
+        // Handle errors
+        error(error.message);
+      });
+  };
+
+  // Antd error message
+  const error = (msg: string) => {
+    messageApi.open({
+      type: "error",
+      content: msg,
+    });
+  };
+
+  // Antd success message
+  const sucess = (msg: string) => {
+    messageApi.open({
+      type: "success",
+      content: msg,
+    });
+  };
+
   return (
     <div className="login flex h-[90vh] items-center mx-16">
+      {contextHolder}
       {/* Image */}
       <motion.section
         initial={{
@@ -25,7 +85,7 @@ function Signup() {
         }}
         className="w-[50%] bg-cover bg-right h-[90%] rounded-2xl"
         style={{
-          backgroundImage: `url(https://img.freepik.com/free-photo/happy-woman-posing-while-wearing-sunglasses_23-2148450360.jpg?t=st=1714566447~exp=1714570047~hmac=a41acb93b4e8752d863df6fdeae82960f411c6e9f5d269927dd3dd24a9f75cd2&w=1480)`,
+          backgroundImage: `url(signup.jpg)`,
         }}
       ></motion.section>
 
@@ -42,17 +102,19 @@ function Signup() {
         </header>
 
         {/* Form */}
-        <form action="#" className="mx-auto w-[500px] py-4 mt-4">
+        <form action={handleFormSubmit} className="mx-auto w-[500px] py-4 mt-4">
           <AnimatedComponent _delay={1.4}>
             <label htmlFor="name" className="mb-2 block">
               Name <span className="text-[red]">*</span>
             </label>
             <input
-              type="email"
+              type="text"
               placeholder="Enter your name"
               className="block w-100 font-light border-[1px] w-[100%] py-3 px-4 rounded-full text-sm"
               autoComplete="new-password"
               id="name"
+              onChange={(e) => setName(e.target.value)}
+              required
             />
           </AnimatedComponent>
           <AnimatedComponent _delay={1.5}>
@@ -65,6 +127,8 @@ function Signup() {
               className="block w-100 font-light border-[1px] w-[100%] py-3 px-4 rounded-full text-sm"
               autoComplete="new-password"
               id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </AnimatedComponent>
           <AnimatedComponent _delay={1.6}>
@@ -77,6 +141,8 @@ function Signup() {
               className="block w-100 font-light border-[1px] w-[100%] py-3 px-4 rounded-full text-sm"
               autoComplete="off"
               id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </AnimatedComponent>
           <AnimatedComponent _delay={1.6}>
@@ -89,12 +155,14 @@ function Signup() {
               className="block w-100 font-light border-[1px] w-[100%] py-3 px-4 rounded-full text-sm"
               autoComplete="off"
               id="re-password"
+              onChange={(e) => setRepassword(e.target.value)}
+              required
             />
           </AnimatedComponent>
           <AnimatedComponent _delay={1.6}>
             <input
               type="submit"
-              value={"Sign Up"}
+              value={isBeingSubmitted ? "Signing up..." : "Sign Up"}
               className="btn-primary rounded-full mt-6 w-[100%] hover:bg-[#333] cursor-pointer"
             />
           </AnimatedComponent>
@@ -111,7 +179,10 @@ function Signup() {
 
         {/* Google sign in */}
         <AnimatedComponent _delay={1.2}>
-          <div className="google-login border-[1px] w-[300px] mx-auto my-6 text-sm rounded-full  py-2 flex justify-center">
+          <div
+            className="google-login border-[1px] w-[300px] mx-auto my-6 text-sm rounded-full  py-2 flex justify-center"
+            onClick={onSignInWithGoogle}
+          >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
               alt=""

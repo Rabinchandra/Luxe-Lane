@@ -4,8 +4,20 @@ import React from "react";
 import Link from "next/link";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import { motion } from "framer-motion";
+import { signInWithGoogle } from "@/firebase/dbOperations";
 
 function Login() {
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((user) => {
+        console.log(user.providerId);
+        console.log(user.user.displayName);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="login flex h-[90vh] items-center mx-16">
       <section className="w-[50%]">
@@ -22,7 +34,10 @@ function Login() {
 
         {/* Google sign in */}
         <AnimatedComponent _delay={1.2}>
-          <div className="google-login border-[1px] w-[300px] mx-auto my-4 text-sm rounded-full  py-2 flex justify-center">
+          <div
+            className="google-login border-[1px] w-[300px] mx-auto my-4 text-sm rounded-full  py-2 flex justify-center"
+            onClick={handleGoogleSignIn}
+          >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
               alt=""
