@@ -3,6 +3,7 @@ import { db } from "./config";
 import { Product } from "../interface/Product";
 import { products } from "./data";
 import { auth } from "./config";
+import { updateProfile } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -63,6 +64,13 @@ export function createUser(
       );
       const user = userCredential.user;
 
+      // Update user profile
+      updateProfile(user, {
+        displayName: name,
+        photoURL:
+          "https://pics.craiyon.com/2023-07-11/830372684bde440a93c1f113b66d1050.webp",
+      });
+
       console.log("User created successfully:", user.uid);
       // Handle successful user creation (e.g., redirect to a welcome page)
 
@@ -73,7 +81,7 @@ export function createUser(
 
       const res = await setDoc(newDocRef, {
         email: user.email,
-        name: name || "Anonymous",
+        displayName: name || "Anonymous",
       });
 
       resolve("User successfully created!");

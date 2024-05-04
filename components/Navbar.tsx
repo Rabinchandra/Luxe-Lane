@@ -1,11 +1,12 @@
 "use client";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import SearchInput from "./SearchInput";
 import Navlinks from "./Navlinks";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { UserAuthContext } from "@/context/UserAuthContext";
+import { IUser } from "@/interface/IUser";
 
 function CartLogo({ cartNo }: { cartNo: number }) {
   return (
@@ -30,7 +31,11 @@ function CartLogo({ cartNo }: { cartNo: number }) {
 }
 
 function Navbar() {
-  const user = null; // just for testing
+  const { user } = useContext(UserAuthContext);
+
+  useEffect(() => {
+    console.log("Navbar: ", user?.photoUrl);
+  }, [user]);
 
   return (
     <nav className="navbar py-5 px-14  flex items-center bg-white justify-between sticky top-0 z-10 bg-opacity-80 backdrop-filter backdrop-blur-md">
@@ -66,16 +71,16 @@ function Navbar() {
           <motion.div
             className="profile w-10 h-10 bg-no-repeat bg-center bg-cover rounded-full hover:opacity-50 cursor-pointer"
             style={{
-              backgroundImage:
-                "url('https://as2.ftcdn.net/v2/jpg/03/21/22/21/1000_F_321222112_lzcSyCPFs3VUxdiAWA4z72ROLLRv8Hij.jpg')",
+              backgroundImage: `url(${user.photoUrl})`,
             }}
             animate={{ opacity: 1, scale: 1 }}
             initial={{ opacity: 0, scale: 0.5 }}
             transition={{ type: "spring", delay: 2.3 }}
           ></motion.div>
         )}
+
         {/* if the user doesn't login, then display the login/sign up button */}
-        {
+        {!user && (
           <Link
             href={"/login"}
             className=" flex items-center text-sm"
@@ -85,7 +90,7 @@ function Navbar() {
               Log in
             </span>
           </Link>
-        }
+        )}
       </section>
     </nav>
   );

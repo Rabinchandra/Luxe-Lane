@@ -1,25 +1,75 @@
 "use client";
 
-import React from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import { motion } from "framer-motion";
 import { signInWithGoogle } from "@/firebase/dbOperations";
+import { UserAuthContext } from "@/context/UserAuthContext";
+import { message } from "antd";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase/config";
 
 function Login() {
+  const { setUser } = useContext(UserAuthContext);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Sign in with google email account
   const handleGoogleSignIn = () => {
     signInWithGoogle()
-      .then((user) => {
-        console.log(user.providerId);
-        console.log(user.user.displayName);
+      .then((userInfo) => {
+        console.clear();
+        const currentUser = {
+          displayName: userInfo.user.displayName,
+          photoUrl: userInfo.user.photoURL,
+        };
+
+        setUser(currentUser);
+        success("User successfully login!");
       })
       .catch((err) => {
-        console.log(err);
+        error(err);
       });
+  };
+
+  // Sign in with email and password
+  const handleSignin = () => {
+    console.log(email, password);
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCred) => {
+        const currentUser = {
+          displayName: userCred.user.displayName,
+          photoUrl: userCred.user.photoURL,
+        };
+
+        success("User Sucessfully Login");
+        setUser(currentUser);
+      })
+      .catch((err) => error(err.message));
+  };
+
+  // Antd error message
+  const error = (msg: string) => {
+    messageApi.open({
+      type: "error",
+      content: msg,
+    });
+  };
+
+  // Antd success message
+  const success = (msg: string) => {
+    messageApi.open({
+      type: "success",
+      content: msg,
+    });
   };
 
   return (
     <div className="login flex h-[90vh] items-center mx-16">
+      {contextHolder}
       <section className="w-[50%]">
         <header className="text-center">
           <AnimatedComponent>
@@ -58,7 +108,7 @@ function Login() {
         </AnimatedComponent>
 
         {/* Form */}
-        <form action="#" className="mx-auto w-[500px] py-4 mt-4">
+        <form action={handleSignin} className="mx-auto w-[500px] py-4 mt-4">
           <AnimatedComponent _delay={1.4}>
             <label htmlFor="email" className="mb-2 block">
               Email <span className="text-[red]">*</span>
@@ -68,6 +118,8 @@ function Login() {
               placeholder="Enter your email"
               className="block w-100 font-light border-[1px] w-[100%] py-3 px-4 rounded-full text-sm"
               autoComplete="new-password"
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </AnimatedComponent>
           <AnimatedComponent _delay={1.5}>
@@ -79,6 +131,8 @@ function Login() {
               placeholder="Enter your password"
               className="block w-100 font-light border-[1px] w-[100%] py-3 px-4 rounded-full text-sm"
               autoComplete="off"
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </AnimatedComponent>
           <AnimatedComponent _delay={1.6}>
