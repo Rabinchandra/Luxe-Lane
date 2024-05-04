@@ -30,7 +30,7 @@ function Signup() {
     // create user
     createUser(email, password, name)
       .then((msg) => {
-        sucess(msg);
+        success(msg);
       })
       .catch((err) => error(err))
       .finally(() => setIsBeingSubmitted(false));
@@ -41,11 +41,12 @@ function Signup() {
       .then((userCredential) => {
         // Signed in successfully
         const user = userCredential.user;
-        sucess("User created Successfully!");
+
+        success("User created Successfully!");
       })
-      .catch((error) => {
+      .catch((err) => {
         // Handle errors
-        error(error.message);
+        error(err.message);
       });
   };
 
@@ -58,7 +59,7 @@ function Signup() {
   };
 
   // Antd success message
-  const sucess = (msg: string) => {
+  const success = (msg: string) => {
     messageApi.open({
       type: "success",
       content: msg,

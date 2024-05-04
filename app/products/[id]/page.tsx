@@ -7,6 +7,7 @@ import AddToFavoriteButton from "@/components/product-detail/AddToFavoriteButton
 import { Rate } from "antd";
 import RelatedProductsItems from "@/components/RelatedProducts";
 import AnimatedComponent from "@/components/AnimatedComponent";
+import Image from "next/image";
 
 type Params = {
   params: {
@@ -20,11 +21,21 @@ function ProductDetail({ params }: Params) {
 
   const [product, setProduct] = useState<Product | null>(null);
 
+  const [cartNo, setCartNo] = useState(0);
+
   // fixing async await problem on client side
   useEffect(() => {
     scrollTo(0, 0);
     getProductById(id).then((res) => setProduct(res));
   }, []);
+
+  const incrementCartNo = () => {
+    setCartNo(cartNo + 1);
+  };
+
+  const decrementCartNo = () => {
+    setCartNo(cartNo - 1);
+  };
 
   return (
     <div className="product-detail">
@@ -70,12 +81,44 @@ function ProductDetail({ params }: Params) {
           </AnimatedComponent>
 
           <AnimatedComponent _delay={1.3}>
-            <div className="text-3xl font-bold mt-8 mb-8">
-              {/* $ <Numeral value={product?.price} format={"0,0"} /> */}
-              $ <Numeral value={product?.price} format={"0,0"} />
+            <div className="my-8 flex align-middle">
+              <span className="text-3xl font-bold mr-14 block">
+                $ <Numeral value={product?.price} format={"0,0"} />
+              </span>
+              {/* Add to Cart */}
+              {cartNo === 0 ? (
+                <AnimatedComponent _delay={0}>
+                  <button
+                    className="btn-secondary text-sm rounded-full w-[130px]"
+                    onClick={incrementCartNo}
+                  >
+                    Add to Cart
+                  </button>
+                </AnimatedComponent>
+              ) : (
+                <div className="btn-secondary text-sm rounded-full w-[130px]">
+                  <AnimatedComponent _delay={0}>
+                    <button
+                      className="increment-cart-no pr-2"
+                      onClick={incrementCartNo}
+                    >
+                      <Image src="/plus.png" alt="" width={10} height={10} />
+                    </button>
+                    <span className="px-3 font-bold">{cartNo}</span>
+
+                    <button
+                      className="decrement-cart-no pl-2"
+                      onClick={decrementCartNo}
+                    >
+                      <Image src="/minus.png" alt="" width={10} height={10} />
+                    </button>
+                  </AnimatedComponent>
+                </div>
+              )}
             </div>
           </AnimatedComponent>
 
+          {/* Add to favorite */}
           <AnimatedComponent _delay={1.6}>
             <AddToFavoriteButton />
           </AnimatedComponent>
