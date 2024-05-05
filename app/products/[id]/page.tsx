@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { getProductById } from "../.././../firebase/dbOperations";
 import { Product } from "@/interface/Product";
 import Numeral from "react-numeral";
@@ -8,6 +8,9 @@ import { Rate } from "antd";
 import RelatedProductsItems from "@/components/RelatedProducts";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import Image from "next/image";
+import { UserAuthContext } from "@/context/UserAuthContext";
+import { User } from "firebase/auth";
+import Cart from "@/firebase/cart";
 
 type Params = {
   params: {
@@ -18,10 +21,9 @@ type Params = {
 function ProductDetail({ params }: Params) {
   const id = params.id;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const [product, setProduct] = useState<Product | null>(null);
-
   const [cartNo, setCartNo] = useState(0);
+  const { user }: { user: User } = useContext(UserAuthContext);
 
   // fixing async await problem on client side
   useEffect(() => {
@@ -30,7 +32,13 @@ function ProductDetail({ params }: Params) {
   }, []);
 
   const incrementCartNo = () => {
-    setCartNo(cartNo + 1);
+    if (user) {
+      setCartNo(cartNo + 1);
+      Cart.addToCart(user, product);
+      console.log(user.uid);
+    } else {
+      console.log("Login!!");
+    }
   };
 
   const decrementCartNo = () => {

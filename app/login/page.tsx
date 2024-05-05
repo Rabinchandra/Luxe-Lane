@@ -22,6 +22,7 @@ function Login() {
       .then((userInfo) => {
         console.clear();
         const currentUser = {
+          uid: userInfo.user.uid,
           displayName: userInfo.user.displayName,
           photoUrl: userInfo.user.photoURL,
         };
@@ -41,6 +42,7 @@ function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCred) => {
         const currentUser = {
+          uid: userCred.user.uid,
           displayName: userCred.user.displayName,
           photoUrl: userCred.user.photoURL,
         };

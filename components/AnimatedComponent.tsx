@@ -39,7 +39,7 @@ const AnimatedComponent = ({
       }}
       transition={{
         duration: 0.6,
-        delay: _delay == 0 ? 0 : 1,
+        delay: _delay,
         type: "spring",
         stiffness: 80,
       }}
