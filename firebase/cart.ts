@@ -2,21 +2,15 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./config";
 import { User } from "firebase/auth";
 import { Product } from "@/interface/Product";
-
-interface CartProduct extends Product {
-  quantity?: number;
-}
+import { CartItem } from "@/interface/ICartItem";
 
 class Cart {
   // Add to Cart feature
-  static async addToCart(user: User, cartItem: Product) {
+  static async addToCart(user: User, quantity: number, cartItem: CartItem) {
     try {
       const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-
       // Get the cart items from the firestore - it may be undefined or array of cart items
       const cart = (await this.getCart(user)) || undefined;
-
       // if cart does not exists - meaning cart attribute doesn't exists on the doc - (means the item is not in the cart list)
       // or if cart is empty
       if (!cart || cart.length == 0) {
@@ -24,48 +18,36 @@ class Cart {
           cart: [{ ...cartItem, quantity: 1 }], // Add a quantity attribute
         });
       } else {
-        // Let's say the cart is not empty
-        // Check if current item exists in the cart
-        // if exists, then just increase the quantity, else add the cartitem object with quantity attribute
-        const currentCartItem = cart.find((c) => c.id == cartItem.id);
-        console.clear();
-        console.log(currentCartItem);
+        const otherCartItems = cart.filter(
+          (c: CartItem) => c.id !== cartItem.id
+        );
 
-        // if current item exists
-        if (currentCartItem) {
-          const quantity = currentCartItem.quantity || 0;
+        await updateDoc(docRef, {
+          cart: [...otherCartItems, { ...cartItem, quantity: quantity }],
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-          await updateDoc(docRef, {
-            cart: [
-              {
-                ...currentCartItem,
-                quantity: quantity + 1,
-              },
-            ],
-          });
-        }
-        // if item doesn't exists
-        else {
-          await updateDoc(docRef, {
-            cart: [
-              {
-                ...cartItem,
-                quantity: 1,
-              },
-            ],
-          });
-        }
+  static async removeFromCart(user: User, quantity: number, cartItem: Product) {
+    try {
+      const docRef = doc(db, "users", user.uid);
+      // Get the cart items from the firestore - it may be undefined or array of cart items
+      const cart = (await this.getCart(user)) || undefined;
 
-        /*const newItem =
-          currentCartItem == undefined
-            ? [...cart, { ...cartItem, quantity: 1 }] // if cart item doesn't exists, add a new one with quantity attribute
-            : [
-                ...cart,
-                {
-                  ...currentCartItem,
-                  quantity: (currentCartItem?.quantity || 0) + 1,
-                },
-              ]; // if exists, just increase the cartitem quantity */
+      const otherCartItems =
+        cart?.filter((c: CartItem) => c.id !== cartItem.id) || [];
+
+      if (quantity > 0) {
+        await updateDoc(docRef, {
+          cart: [...otherCartItems, { ...cartItem, quantity: quantity }],
+        });
+      } else {
+        await updateDoc(docRef, {
+          cart: [...otherCartItems],
+        });
       }
     } catch (err) {
       console.log(err);

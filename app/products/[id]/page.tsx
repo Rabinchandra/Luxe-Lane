@@ -11,6 +11,7 @@ import Image from "next/image";
 import { UserAuthContext } from "@/context/UserAuthContext";
 import { User } from "firebase/auth";
 import Cart from "@/firebase/cart";
+import { CartItem } from "@/interface/ICartItem";
 
 type Params = {
   params: {
@@ -22,7 +23,7 @@ function ProductDetail({ params }: Params) {
   const id = params.id;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [product, setProduct] = useState<Product | null>(null);
-  const [cartNo, setCartNo] = useState(0);
+  const [quantity, setQuantity] = useState(0);
   const { user }: { user: User } = useContext(UserAuthContext);
 
   // fixing async await problem on client side
@@ -31,18 +32,26 @@ function ProductDetail({ params }: Params) {
     getProductById(id).then((res) => setProduct(res));
   }, []);
 
-  const incrementCartNo = () => {
-    if (user) {
-      setCartNo(cartNo + 1);
-      Cart.addToCart(user, product);
-      console.log(user.uid);
+  // Increment Quantity / Cart
+  const incrementQuantity = () => {
+    // Extract the neccessary attributes
+    const cartItem: CartItem = {
+      id: product?.id || "",
+      name: product?.name || "",
+      images: product?.images || [],
+      price: product?.price || 0,
+    };
+
+    if (user && cartItem.id !== "") {
+      setQuantity(quantity + 1);
+      Cart.addToCart(user, quantity + 1, cartItem);
     } else {
       console.log("Login!!");
     }
   };
 
-  const decrementCartNo = () => {
-    setCartNo(cartNo - 1);
+  const decrementQuantity = () => {
+    setQuantity(quantity - 1);
   };
 
   return (
@@ -94,11 +103,11 @@ function ProductDetail({ params }: Params) {
                 $ <Numeral value={product?.price} format={"0,0"} />
               </span>
               {/* Add to Cart */}
-              {cartNo === 0 ? (
+              {quantity === 0 ? (
                 <AnimatedComponent _delay={0}>
                   <button
                     className="btn-secondary text-sm rounded-full w-[130px]"
-                    onClick={incrementCartNo}
+                    onClick={incrementQuantity}
                   >
                     Add to Cart
                   </button>
@@ -108,15 +117,15 @@ function ProductDetail({ params }: Params) {
                   <AnimatedComponent _delay={0}>
                     <button
                       className="increment-cart-no pr-2"
-                      onClick={incrementCartNo}
+                      onClick={incrementQuantity}
                     >
                       <Image src="/plus.png" alt="" width={10} height={10} />
                     </button>
-                    <span className="px-3 font-bold">{cartNo}</span>
+                    <span className="px-3 font-bold">{quantity}</span>
 
                     <button
                       className="decrement-cart-no pl-2"
-                      onClick={decrementCartNo}
+                      onClick={decrementQuantity}
                     >
                       <Image src="/minus.png" alt="" width={10} height={10} />
                     </button>
