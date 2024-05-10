@@ -11,7 +11,8 @@ import Image from "next/image";
 import { UserAuthContext } from "@/context/UserAuthContext";
 import { User } from "firebase/auth";
 import Cart from "@/firebase/cart";
-import { CartItem } from "@/interface/ICartItem";
+import { ICartItem } from "@/interface/ICartItem";
+import { CartContext } from "@/context/CartContext";
 
 type Params = {
   params: {
@@ -25,21 +26,39 @@ function ProductDetail({ params }: Params) {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(0);
   const { user }: { user: User } = useContext(UserAuthContext);
+  const { cart, setCart } = useContext(CartContext);
 
   // fixing async await problem on client side
   useEffect(() => {
     scrollTo(0, 0);
+    // Get the product from the firebase by product
     getProductById(id).then((res) => setProduct(res));
+    // Temporary code - until user auth change state code is created
+    // Load the cart items from firestore
+    Cart.getCart(user).then((cartItem) => setCart(cartItem));
   }, []);
+
+  useEffect(() => {
+    if (cart) {
+      console.clear();
+      const currentCartProduct = cart.find((c) => c.id == product?.id);
+      // update the quantity
+      setQuantity(currentCartProduct?.quantity || 0);
+      console.log("current", currentCartProduct, cart);
+    } else {
+      console.log("cart not defined");
+    }
+  }, [cart]);
 
   // Increment Quantity / Cart
   const incrementQuantity = () => {
     // Extract the neccessary attributes
-    const cartItem: CartItem = {
+    const cartItem: ICartItem = {
       id: product?.id || "",
       name: product?.name || "",
       images: product?.images || [],
       price: product?.price || 0,
+      quantity: quantity,
     };
 
     if (user && cartItem.id !== "") {
@@ -51,7 +70,15 @@ function ProductDetail({ params }: Params) {
   };
 
   const decrementQuantity = () => {
+    const currentCartProduct = cart.find((c) => c.id == product?.id);
+
     setQuantity(quantity - 1);
+    if (user && currentCartProduct) {
+      setQuantity(quantity - 1);
+      Cart.removeFromCart(user, quantity - 1, currentCartProduct);
+    } else {
+      console.log("Login!!");
+    }
   };
 
   return (

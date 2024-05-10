@@ -7,6 +7,7 @@ import { ConfigProvider } from "antd";
 import SearchContextProvider from "@/context/SearchContext";
 import { usePathname } from "next/navigation";
 import UserAuthContextProvider from "@/context/UserAuthContext";
+import CartContextProvider from "@/context/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,10 +36,12 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <UserAuthContextProvider>
-            <SearchContextProvider>
-              <Navbar />
-              {children}
-            </SearchContextProvider>
+            <CartContextProvider>
+              <SearchContextProvider>
+                <Navbar />
+                {children}
+              </SearchContextProvider>
+            </CartContextProvider>
           </UserAuthContextProvider>
         </body>
       </html>

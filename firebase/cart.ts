@@ -2,11 +2,11 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./config";
 import { User } from "firebase/auth";
 import { Product } from "@/interface/Product";
-import { CartItem } from "@/interface/ICartItem";
+import { ICartItem } from "@/interface/ICartItem";
 
 class Cart {
   // Add to Cart feature
-  static async addToCart(user: User, quantity: number, cartItem: CartItem) {
+  static async addToCart(user: User, quantity: number, cartItem: ICartItem) {
     try {
       const docRef = doc(db, "users", user.uid);
       // Get the cart items from the firestore - it may be undefined or array of cart items
@@ -19,7 +19,7 @@ class Cart {
         });
       } else {
         const otherCartItems = cart.filter(
-          (c: CartItem) => c.id !== cartItem.id
+          (c: ICartItem) => c.id !== cartItem.id
         );
 
         await updateDoc(docRef, {
@@ -31,14 +31,18 @@ class Cart {
     }
   }
 
-  static async removeFromCart(user: User, quantity: number, cartItem: Product) {
+  static async removeFromCart(
+    user: User,
+    quantity: number,
+    cartItem: ICartItem
+  ) {
     try {
       const docRef = doc(db, "users", user.uid);
       // Get the cart items from the firestore - it may be undefined or array of cart items
       const cart = (await this.getCart(user)) || undefined;
 
       const otherCartItems =
-        cart?.filter((c: CartItem) => c.id !== cartItem.id) || [];
+        cart?.filter((c: ICartItem) => c.id !== cartItem.id) || [];
 
       if (quantity > 0) {
         await updateDoc(docRef, {
@@ -62,7 +66,8 @@ class Cart {
 
       // get data
       if (docSnap.exists()) {
-        return <CartProduct[]>docSnap.data().cart;
+        console.log("test");
+        return docSnap.data().cart;
       }
     } catch (err) {
       console.log(err);
