@@ -59,7 +59,8 @@ class Cart {
   }
 
   // Fetch cart
-  static async getCart(user: User) {
+  static async getCart(user: User | null) {
+    if (!user) return;
     try {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);

@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import { motion } from "framer-motion";
-import { createUser, signInWithGoogle } from "@/firebase/dbOperations";
+import {
+  createUser,
+  saveUserToDoc,
+  signInWithGoogle,
+} from "@/firebase/dbOperations";
 import { message } from "antd";
 
 function Signup() {
@@ -38,9 +42,12 @@ function Signup() {
 
   const onSignInWithGoogle = () => {
     signInWithGoogle()
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in successfully
         const user = userCredential.user;
+
+        // Once sign up done, save new user info the firestore
+        await saveUserToDoc(user);
 
         success("User created Successfully!");
       })

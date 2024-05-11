@@ -6,7 +6,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { UserAuthContext } from "@/context/UserAuthContext";
-import { IUser } from "@/interface/IUser";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "@/firebase/config";
+import { Dropdown, MenuProps } from "antd";
 
 function CartLogo({ cartNo }: { cartNo: number }) {
   return (
@@ -31,11 +33,31 @@ function CartLogo({ cartNo }: { cartNo: number }) {
 }
 
 function Navbar() {
-  const { user } = useContext(UserAuthContext);
+  const { user, setUser } = useContext(UserAuthContext);
 
   useEffect(() => {
-    console.log("Navbar: ", user?.photoUrl);
-  }, [user]);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("user login!!", user.displayName);
+        setUser(user);
+      } else {
+        console.log("user do not login");
+      }
+    });
+  }, []);
+
+  const logout = () => {
+    signOut(auth);
+    setUser(null);
+  };
+
+  // Drop down menu when hover profile picture
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <span onClick={logout}>Log out</span>,
+    },
+  ];
 
   return (
     <nav className="navbar py-5 px-14  flex items-center bg-white justify-between sticky top-0 z-10 bg-opacity-80 backdrop-filter backdrop-blur-md">
@@ -68,15 +90,17 @@ function Navbar() {
         {/* if user login */}
         {user && (
           /* Profile */
-          <motion.div
-            className="profile w-10 h-10 bg-no-repeat bg-center bg-cover rounded-full hover:opacity-50 cursor-pointer"
-            style={{
-              backgroundImage: `url(${user.photoUrl})`,
-            }}
-            animate={{ opacity: 1, scale: 1 }}
-            initial={{ opacity: 0, scale: 0.5 }}
-            transition={{ type: "spring", delay: 2.3 }}
-          ></motion.div>
+          <Dropdown menu={{ items }} placement="bottom">
+            <motion.div
+              className="profile w-10 h-10 bg-no-repeat bg-center bg-cover rounded-full hover:opacity-50 cursor-pointer"
+              style={{
+                backgroundImage: `url(${user.photoURL})`,
+              }}
+              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              transition={{ type: "spring", delay: 2.3 }}
+            ></motion.div>
+          </Dropdown>
         )}
 
         {/* if the user doesn't login, then display the login/sign up button */}

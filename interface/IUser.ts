@@ -1,4 +1,4 @@
 export interface IUser {
-  displayName: string;
-  photoUrl: string;
+  displayName: string | null;
+  photoURL: string | null;
 }

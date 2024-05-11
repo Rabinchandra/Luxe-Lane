@@ -203,3 +203,8 @@ a:hover {
 .ant-message-notice-content {
   background: #fff !important;
 }
+
+/* Antd drop down */
+.ant-dropdown > * {
+  background-color: #fff !important;
+}

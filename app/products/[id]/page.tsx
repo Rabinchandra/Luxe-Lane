@@ -25,7 +25,7 @@ function ProductDetail({ params }: Params) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(0);
-  const { user }: { user: User } = useContext(UserAuthContext);
+  const { user } = useContext(UserAuthContext);
   const { cart, setCart } = useContext(CartContext);
 
   // fixing async await problem on client side
