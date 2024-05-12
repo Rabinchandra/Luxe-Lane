@@ -1,8 +1,8 @@
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "./config";
-import { Product } from "../interface/Product";
-import { products } from "./data";
-import { auth } from "./config";
+import { db } from "@/firebase/config";
+import { Product } from "@/interface/Product";
+// import { products } from "@/firebase/data";
+import { auth } from "@/firebase/config";
 import { User, updateProfile } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
@@ -11,7 +11,7 @@ import {
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
-export function addAllProducts() {
+/* export function addAllProducts() {
   products.forEach(async (data) => {
     const productCollection = collection(db, "products");
     const newDocRef = doc(productCollection, data.id);
@@ -19,7 +19,7 @@ export function addAllProducts() {
     const res = await setDoc(newDocRef, data);
     console.log(res);
   });
-}
+} */
 
 // save new user to doc - firestore
 export async function saveUserToDoc(user: User) {

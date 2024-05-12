@@ -8,7 +8,7 @@ import {
   createUser,
   saveUserToDoc,
   signInWithGoogle,
-} from "@/firebase/dbOperations";
+} from "@/services/authServices";
 import { message } from "antd";
 
 function Signup() {

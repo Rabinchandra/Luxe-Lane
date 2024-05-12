@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useContext } from "react";
-import { getProductById } from "../.././../firebase/dbOperations";
+import { getProductById } from "@/services/authServices";
 import { Product } from "@/interface/Product";
 import Numeral from "react-numeral";
 import AddToFavoriteButton from "@/components/product-detail/AddToFavoriteButton";
@@ -9,7 +9,6 @@ import RelatedProductsItems from "@/components/RelatedProducts";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import Image from "next/image";
 import { UserAuthContext } from "@/context/UserAuthContext";
-import { User } from "firebase/auth";
 import Cart from "@/firebase/cart";
 import { ICartItem } from "@/interface/ICartItem";
 import { CartContext } from "@/context/CartContext";

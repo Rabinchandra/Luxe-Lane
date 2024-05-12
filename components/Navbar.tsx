@@ -45,7 +45,7 @@ function Navbar() {
       }
     });
   }, []);
-
+  //
   const logout = () => {
     signOut(auth);
     setUser(null);
@@ -98,7 +98,7 @@ function Navbar() {
               }}
               animate={{ opacity: 1, scale: 1 }}
               initial={{ opacity: 0, scale: 0.5 }}
-              transition={{ type: "spring", delay: 2.3 }}
+              transition={{ type: "spring" }}
             ></motion.div>
           </Dropdown>
         )}

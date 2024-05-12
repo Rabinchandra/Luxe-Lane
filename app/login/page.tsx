@@ -4,11 +4,13 @@ import React, { useContext, useState } from "react";
 import Link from "next/link";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import { motion } from "framer-motion";
-import { signInWithGoogle } from "@/firebase/dbOperations";
+import { signInWithGoogle } from "@/services/authServices";
 import { UserAuthContext } from "@/context/UserAuthContext";
 import { message } from "antd";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase/config";
+import { IUser } from "@/interface/IUser";
+import { userInfo } from "os";
 
 function Login() {
   const { setUser } = useContext(UserAuthContext);
@@ -21,14 +23,14 @@ function Login() {
     signInWithGoogle()
       .then((userInfo) => {
         console.clear();
-        const currentUser = {
-          uid: userInfo.user.uid,
-          displayName: userInfo.user.displayName,
-          photoUrl: userInfo.user.photoURL,
-        };
+        // const currentUser = {
+        //   uid: userInfo.user.uid,
+        //   displayName: userInfo.user.displayName,
+        //   photoURL: userInfo.user.photoURL,
+        // };
 
-        setUser(currentUser);
         success("User successfully login!");
+        setUser(userInfo.user);
       })
       .catch((err) => {
         error(err);
@@ -41,14 +43,14 @@ function Login() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCred) => {
-        const currentUser = {
-          uid: userCred.user.uid,
-          displayName: userCred.user.displayName,
-          photoUrl: userCred.user.photoURL,
-        };
+        // const currentUser: IUser = {
+        //   uid: userCred.user.uid,
+        //   displayName: userCred.user.displayName,
+        //   photoURL: userCred.user.photoURL,
+        // };
 
         success("User Sucessfully Login");
-        setUser(currentUser);
+        setUser(userCred.user);
       })
       .catch((err) => error(err.message));
   };
