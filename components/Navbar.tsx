@@ -20,16 +20,18 @@ function CartLogo({ cartNo }: { cartNo: number }) {
       initial={{ opacity: 0, y: 10 }}
       transition={{ type: "spring", delay: 1.7 }}
     >
-      <Image
-        src={"/cart.svg"}
-        width={23}
-        height={23}
-        alt="s"
-        className="cursor-pointer"
-      />
-      <div className="cart-items-no absolute rounded-full w-4 h-4 bg-black text-white text-[10px] flex items-center justify-center font-bold top-3 right-[-4px]">
-        {cartNo}
-      </div>
+      <Link href={"/cart"}>
+        <Image
+          src={"/cart.svg"}
+          width={23}
+          height={23}
+          alt="s"
+          className="cursor-pointer"
+        />
+        <div className="cart-items-no absolute rounded-full w-4 h-4 bg-black text-white text-[10px] flex items-center justify-center font-bold top-3 right-[-4px]">
+          {cartNo}
+        </div>
+      </Link>
     </motion.div>
   );
 }
