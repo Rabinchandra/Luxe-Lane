@@ -1,7 +1,6 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "./config";
+import { db } from "../firebase/config";
 import { User } from "firebase/auth";
-import { Product } from "@/interface/Product";
 import { ICartItem } from "@/interface/ICartItem";
 
 class Cart {

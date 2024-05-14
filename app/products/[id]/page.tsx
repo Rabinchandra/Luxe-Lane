@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useContext } from "react";
-import { getProductById } from "@/services/authServices";
-import { Product } from "@/interface/Product";
+import { getProductById } from "@/services/productService";
+import { IProduct } from "@/interface/IProduct";
 import Numeral from "react-numeral";
 import AddToFavoriteButton from "@/components/product-detail/AddToFavoriteButton";
 import { Rate } from "antd";
@@ -9,9 +9,11 @@ import RelatedProductsItems from "@/components/RelatedProducts";
 import AnimatedComponent from "@/components/AnimatedComponent";
 import Image from "next/image";
 import { UserAuthContext } from "@/context/UserAuthContext";
-import Cart from "@/firebase/cart";
+import Cart from "@/services/cartServices";
 import { ICartItem } from "@/interface/ICartItem";
 import { CartContext } from "@/context/CartContext";
+import ProductComparisonService from "@/services/productComparisonService";
+import { message } from "antd";
 
 type Params = {
   params: {
@@ -22,10 +24,11 @@ type Params = {
 function ProductDetail({ params }: Params) {
   const id = params.id;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState(0);
   const { user } = useContext(UserAuthContext);
   const { cart, setCart } = useContext(CartContext);
+  const [messageApi, contextHolder] = message.useMessage();
 
   // fixing async await problem on client side
   useEffect(() => {
@@ -37,17 +40,21 @@ function ProductDetail({ params }: Params) {
     Cart.getCart(user).then((cartItem) => setCart(cartItem));
   }, []);
 
-  useEffect(() => {
-    if (cart) {
-      console.clear();
-      const currentCartProduct = cart.find((c) => c.id == product?.id);
-      // update the quantity
-      setQuantity(currentCartProduct?.quantity || 0);
-      console.log("current", currentCartProduct, cart);
-    } else {
-      console.log("cart not defined");
-    }
-  }, [cart]);
+  // Antd error message
+  const error = (msg: string) => {
+    messageApi.open({
+      type: "error",
+      content: msg,
+    });
+  };
+
+  // Antd success message
+  const success = (msg: string) => {
+    messageApi.open({
+      type: "success",
+      content: msg,
+    });
+  };
 
   // Increment Quantity / Cart
   const incrementQuantity = () => {
@@ -80,8 +87,17 @@ function ProductDetail({ params }: Params) {
     }
   };
 
+  const handleAddToComparison = () => {
+    if (user && product) {
+      ProductComparisonService.addToComparison(user, product)
+        .then((msg) => success(`${msg}`))
+        .catch((err) => error(err));
+    }
+  };
+
   return (
     <div className="product-detail">
+      {contextHolder}
       <AnimatedComponent _delay={0}>
         <header className="text-slate-400 font-extralight text-sm mt-8 mx-14">
           Home / {product?.category} / {product?.subcategories[0]}
@@ -193,7 +209,10 @@ function ProductDetail({ params }: Params) {
             </AnimatedComponent>
 
             <AnimatedComponent _delay={3.3} _style={{ display: "inline" }}>
-              <button className="btn-secondary compare-product-btn">
+              <button
+                className="btn-secondary compare-product-btn"
+                onClick={handleAddToComparison}
+              >
                 Compare Product
               </button>
             </AnimatedComponent>
