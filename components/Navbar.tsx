@@ -9,6 +9,8 @@ import { UserAuthContext } from "@/context/UserAuthContext";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/firebase/config";
 import { Dropdown, MenuProps } from "antd";
+import Cart from "@/services/cartServices";
+import { CartContext } from "@/context/CartContext";
 
 function CartLogo({ cartNo }: { cartNo: number }) {
   return (
@@ -34,12 +36,20 @@ function CartLogo({ cartNo }: { cartNo: number }) {
 
 function Navbar() {
   const { user, setUser } = useContext(UserAuthContext);
+  const { setCart } = useContext(CartContext);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("user login!!", user.displayName);
         setUser(user);
+
+        // Load the cart items from firestore
+        if (user) {
+          Cart.getCart(user).then((res) => {
+            setCart(res);
+          });
+        }
       } else {
         console.log("user do not login");
       }

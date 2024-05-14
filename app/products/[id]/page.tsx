@@ -35,10 +35,14 @@ function ProductDetail({ params }: Params) {
     scrollTo(0, 0);
     // Get the product from the firebase by product
     getProductById(id).then((res) => setProduct(res));
-    // Temporary code - until user auth change state code is created
-    // Load the cart items from firestore
-    Cart.getCart(user).then((cartItem) => setCart(cartItem));
   }, []);
+
+  useEffect(() => {
+    if (cart && cart.length > 0 && product) {
+      const currentCart = cart.find((c) => c.id == product.id);
+      setQuantity(currentCart?.quantity || 0);
+    }
+  }, [user, product, cart]);
 
   // Antd error message
   const error = (msg: string) => {

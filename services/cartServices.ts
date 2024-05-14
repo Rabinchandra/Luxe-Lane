@@ -58,20 +58,21 @@ class Cart {
   }
 
   // Fetch cart
-  static async getCart(user: User | null) {
-    if (!user) return;
-    try {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+  static async getCart(user: User): Promise<ICartItem[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
 
-      // get data
-      if (docSnap.exists()) {
-        console.log("test");
-        return docSnap.data().cart;
+        // get data
+        if (docSnap.exists()) {
+          console.log("Cart :", docSnap.data().cart);
+          resolve(<ICartItem[]>docSnap.data().cart);
+        }
+      } catch (err) {
+        reject(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
+    });
   }
 }
 
