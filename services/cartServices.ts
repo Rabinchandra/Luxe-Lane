@@ -66,7 +66,7 @@ class Cart {
 
         // get data
         if (docSnap.exists()) {
-          console.log("Cart :", docSnap.data().cart);
+          // console.log("Cart :", docSnap.data().cart);
           resolve(<ICartItem[]>docSnap.data().cart);
         }
       } catch (err) {

@@ -2,10 +2,8 @@ import { User } from "firebase/auth";
 import { IProduct } from "@/interface/IProduct";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/config";
-
-interface ICompareProductItem {
-  id: string;
-}
+import ICompareProductItem from "@/interface/ICompareProductItem";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 class ProductComparisonService {
   static async addToComparison(user: User, product: IProduct) {
@@ -46,7 +44,29 @@ class ProductComparisonService {
       } else return [];
     } catch (err) {
       console.log(err);
+      return [];
     }
+  }
+
+  static async suggest(productsItems: IProduct[], userInput: string) {
+  
+    const genAI = new GoogleGenerativeAI(
+      "AIzaSyAhGhLsnEMCzPNot1DYKzBmjdzmAEl0Ib0"
+    );
+
+    // For text-only input, use the gemini-pro model
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+    const prompt =
+      `I am using you to analyse about products in my ecommerce website. Now these are the data of the products: ${JSON.stringify(
+        productsItems
+      )}. User will give you prompt. Answer the question from the given products only. Important: Give in html div with the important points in bold properly formatted with proper line breaks with <br> but do not include html as a text. Don't use product 1, product 2.. Just use the actual product names for better understanding. Now: User Input is:` +
+      userInput;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    return text;
   }
 }
 
