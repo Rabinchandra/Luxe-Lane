@@ -41,7 +41,6 @@ function ProductComparison() {
         const sanitizedHtml = DOMPurify.sanitize(htmlString);
         setAIResponse(sanitizedHtml);
         setLoading(false);
-        console.log(sanitizedHtml);
       }
     );
   };
@@ -98,12 +97,17 @@ function ProductComparison() {
             <header className="font-bold text-xl my-4">Chat</header>
           </AnimatedComponent>
           <AnimatedComponent>
-            <div className="chat-box h-[500px] overflow-scroll mb-8">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: formatTextWithBold(aiResponse),
-                }}
-              />
+            <div className="chat-box h-[450px] overflow-scroll mb-8 bg-gray-50 p-8 rounded-xl">
+              {isLoading ? (
+                "Loading"
+              ) : (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: formatTextWithBold(aiResponse),
+                  }}
+                  className="leading-7"
+                />
+              )}
             </div>
           </AnimatedComponent>
           <div>
@@ -146,7 +150,7 @@ function ProductComparison() {
                 className="send bg-black text-white px-8 py-4 rounded-2xl cursor-pointer"
                 onClick={onSubmitUserInput}
               >
-                {isLoading ? "Sending..." : "Send"}
+                {isLoading ? "Analyzing..." : "Ask"}
               </div>
             </div>
           </AnimatedComponent>

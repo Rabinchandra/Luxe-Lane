@@ -6,7 +6,7 @@ const AnimatedComponent = ({
   children,
   _delay,
   _style,
-}: {
+} : {
   children: ReactNode;
   _delay?: number;
   _style?: { [key: string]: any };

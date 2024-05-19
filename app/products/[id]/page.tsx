@@ -14,6 +14,7 @@ import { ICartItem } from "@/interface/ICartItem";
 import { CartContext } from "@/context/CartContext";
 import ProductComparisonService from "@/services/productComparisonService";
 import { message } from "antd";
+import ReviewService from "@/services/reviewServices";
 
 type Params = {
   params: {
@@ -29,6 +30,7 @@ function ProductDetail({ params }: Params) {
   const { user } = useContext(UserAuthContext);
   const { cart, setCart } = useContext(CartContext);
   const [messageApi, contextHolder] = message.useMessage();
+  const [reviewText, setReviewText] = useState("");
 
   // fixing async await problem on client side
   useEffect(() => {
@@ -97,6 +99,12 @@ function ProductDetail({ params }: Params) {
         .then((msg) => success(`${msg}`))
         .catch((err) => error(err));
     }
+  };
+
+  const handleAddReview = () => {
+    ReviewService.analyse(reviewText)
+      .then((res) => console.log(res))
+      .catch((err) => console.log("Inappropriate"));
   };
 
   return (
@@ -281,13 +289,18 @@ function ProductDetail({ params }: Params) {
           ))}
 
           <div className="current-user-review mx-10">
-            <input
-              type="text"
+            <textarea
               placeholder="Type your review here"
               className="border-b-[1px] p-2 w-[100%] block outline-none"
+              onChange={(e) => setReviewText(e.target.value)}
             />
             <Rate allowHalf className="mt-4 rate" />
-            <button className="btn-secondary mt-7 block">Add Review</button>
+            <button
+              className="btn-secondary mt-7 block"
+              onClick={handleAddReview}
+            >
+              Add Review
+            </button>
           </div>
         </div>
       </section>
