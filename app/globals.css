@@ -68,8 +68,6 @@ a:hover {
 }
 
 /* Border Shadow */
-.border-shadow {
-}
 
 .product-card {
   cursor: pointer;
@@ -208,4 +206,14 @@ a:hover {
 /* Antd drop down */
 .ant-dropdown > * {
   background-color: #fff !important;
+}
+
+/*  */
+.ant-modal-content,
+.ant-modal-content > * {
+  background-color: #fff !important;
+}
+
+.ant-modal-footer {
+  display: none;
 }

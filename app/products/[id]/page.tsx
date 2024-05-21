@@ -15,6 +15,7 @@ import { CartContext } from "@/context/CartContext";
 import ProductComparisonService from "@/services/productComparisonService";
 import { message } from "antd";
 import ReviewService from "@/services/reviewServices";
+import { Modal } from "antd";
 
 type Params = {
   params: {
@@ -31,6 +32,10 @@ function ProductDetail({ params }: Params) {
   const { cart, setCart } = useContext(CartContext);
   const [messageApi, contextHolder] = message.useMessage();
   const [reviewText, setReviewText] = useState("");
+  // Review Modal
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("Content of the modal");
 
   // fixing async await problem on client side
   useEffect(() => {
@@ -101,10 +106,54 @@ function ProductDetail({ params }: Params) {
     }
   };
 
+  function convertStringToObject(input: string): { [key: string]: string } {
+    const lines = input.split("\n");
+    const obj: { [key: string]: string } = {};
+
+    lines.forEach((line) => {
+      const [keyPart, valuePart] = line.split(":").map((part) => part.trim());
+      const key = keyPart.replace(/^\*?\s*/, ""); // Remove leading '* ' or '*' and spaces
+      const value = valuePart.replace(/^"|"$/g, ""); // Remove surrounding quotes if any
+      obj[key] = value;
+    });
+
+    return obj;
+  }
+
   const handleAddReview = () => {
+    setModalText("Adding your review...");
+    showModal();
     ReviewService.analyse(reviewText)
-      .then((res) => console.log(res))
-      .catch((err) => console.log("Inappropriate"));
+      .then((res) => {
+        const obj = convertStringToObject(res);
+
+        if (obj.status == "appropriate") {
+          handleCancel();
+          success("Your review is sucessfully added!");
+          // Push the review in productObj
+          product?.reviews.push({
+            user: user?.displayName || "Anonymous",
+            rating: 3,
+            comment: reviewText,
+          });
+        } else {
+          setModalText("Sorry! Your review cannot be added. " + obj.feedback);
+        }
+      })
+      .catch((err) => {
+        setModalText(
+          "Sorry! Something went wrong. Please make sure that your review is appropriate"
+        );
+      });
+  };
+
+  // Review Modal Functions
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
   };
 
   return (
@@ -302,6 +351,16 @@ function ProductDetail({ params }: Params) {
               Add Review
             </button>
           </div>
+
+          <Modal
+            style={{ top: 150 }}
+            title="Review Status"
+            open={open}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            <p>{modalText}</p>
+          </Modal>
         </div>
       </section>
     </div>
